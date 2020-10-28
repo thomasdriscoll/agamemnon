@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  title: Agamemnon
+  description: API for cryptocurrencies and their data
+  version: 1.0.0
+servers:
+  - url: 'https://staging.agamemnon.thomas-driscoll.com'
+  - url: 'https://agamemnon.thomas-driscoll.com'
+paths:
+  "/agamemnon/allLabels":
+    get:
+      description: Returns a list of all cryptos and their symbols
+      responses:
+        '200':
+          description: JSON array of cryptos and symbols
+          content:
+            application/json:
+
+  "/agamemnon/cryptos/{cryptoId}/onboard":
+    post:
+      description: Onboards a crypto by symbol with daily candle data extending for the past year
+      parameters:
+        - in: path
+          name: cryptoId
+          required: true
+          schema:
+            type: string
+      responses:
+
+  "/agamemnon/cryptos/{cryptoId}/dailyvolatility/":
+    post:
+      description: Adds a crypto by symbol with as frequent of data as possible for the past 5 business days
+      parameters:
+      - in: path
+        name: cryptoId
+        required: true
+        schema:
+          type: string
+      responses:
+
+    delete:
+      description: Deletes whatever got added by the POST operation
+      parameters:
+        - in: path
+          name: cryptoId
+          required: true
+          schema:
+            type: string
+      responses:
+
+  "/agamemnon/cryptos/{cryptoId}/range":
+    get:
+      description: For a provided time range, return the daily candles (no more than a year's worth)
+      parameters:
+        - in: path
+          name: cryptoId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: since
+          required: false
+          schema:
+            type: datetime
+            default:
+              - Three months ago
+        - in: query
+          name: until
+          required: false
+          schema:
+            type: datetime
+            default:
+              - Now
+      responses:
+
+  "/agamemnon/cryptos/{cryptoId}/calculate":
+    get:
+      description: Calculates and returns standard deviation and variance of the provided crypto, given a specific time range
+      parameters:
+        - in: path
+          name: cryptoId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: since
+          required: false
+          schema:
+            type: datetime
+            default:
+              - Three months ago
+        - in: query
+          name: until
+          required: false
+          schema:
+            type: datetime
+            default:
+              - Now
+      responses:
+
+components:
+  schemas:
+    CryptoResponse:
+      type: object
+      properties:
+        status:
+          type: int
+        data:
+          type: Crypto
+    MultipleCryptosResponse:
+      type: object
+      properties:
+        status:
+          type: int
+        data:
+          type: Crypto
