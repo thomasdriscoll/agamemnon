@@ -15,6 +15,9 @@ paths:
           description: JSON array of cryptos and symbols
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/CryptoLabelResponse'
+
 
   "/agamemnon/cryptos/{cryptoId}/onboard":
     post:
@@ -26,6 +29,12 @@ paths:
           schema:
             type: string
       responses:
+        '201':
+          description: JSON array of cryptos and symbols
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultipleCryptosResponse'
 
   "/agamemnon/cryptos/{cryptoId}/dailyvolatility/":
     post:
@@ -37,7 +46,12 @@ paths:
         schema:
           type: string
       responses:
-
+        '201':
+          description: JSON array of cryptos and symbols
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultipleSameDayCryptosResponse'
     delete:
       description: Deletes whatever got added by the POST operation
       parameters:
@@ -47,6 +61,17 @@ paths:
           schema:
             type: string
       responses:
+        '204':
+          description: Successfully deletes same day data from database
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: int
+                  data:
+                    type: none
 
   "/agamemnon/cryptos/{cryptoId}/range":
     get:
@@ -72,6 +97,12 @@ paths:
             default:
               - Now
       responses:
+        '200':
+          description: JSON array of cryptos and symbols
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultipleCryptosResponse'
 
   "/agamemnon/cryptos/{cryptoId}/calculate":
     get:
@@ -97,9 +128,22 @@ paths:
             default:
               - Now
       responses:
+        '200':
+          description: JSON array of cryptos and symbols
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CryptoVarianceResponse'
 
 components:
   schemas:
+    CryptoLabelResponse:
+      type: object
+      properties:
+        status:
+          type: int
+        data:
+          type: CryptoLabel
     CryptoResponse:
       type: object
       properties:
@@ -113,4 +157,87 @@ components:
         status:
           type: int
         data:
-          type: Crypto
+          type: array
+          items:
+            $ref: "#/components/schemas/Crypto"
+    MultipleSameDayCryptosResponse:
+      type: object
+      properties:
+        status:
+          type: int
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/SameDayCrypto"
+    CryptoVarianceResponse:
+      type: object
+      properties:
+        status:
+          type: int
+        data:
+          type: CryptoVariance
+    Crypto:
+      type: object
+      properties:
+        crypto:
+          type: string
+          example: Apple
+        label:
+          type: string
+          example: APPL
+        high:
+          type: decimal
+        low:
+          type: decimal
+        open:
+          type: decimal
+        close:
+          type: decimal
+        date:
+          type: datetime
+    CryptoVariance:
+      type: object
+      properties:
+        crypto:
+          type: string
+          example: Apple
+        label:
+          type: string
+          example: APPL
+        since:
+          type: dateime
+        until:
+          type: datetime
+        stddev:
+          type: float
+        variance:
+          type: float
+    SameDayCrypto:
+      type: object
+      properties:
+        crypto:
+          type: string
+          example: Apple
+        label:
+          type: string
+          example: APPL
+        high:
+          type: decimal
+        low:
+          type: decimal
+        open:
+          type: decimal
+        close:
+          type: decimal
+        time:
+          type: datetime
+          example: "4:03 PM 28 October 2020 (this is incorrect but we want specific times)"
+    CryptoLabel:
+      type: object
+      properties:
+        crypto:
+          type: string
+          example: Apple
+        label:
+          type: string
+          example: APPL
