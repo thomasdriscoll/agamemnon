@@ -34,7 +34,6 @@ internal class AgamemnonControllerTest {
     private val BNAME = "Brian"
     private val RESPONSE = DriscollResponse(HttpStatus.OK.value(), "Thomas")
 
-
     private val ERR = DriscollException(AgamemnonExceptionEnum.TESTING_EXCEPTIONS.status, AgamemnonExceptionEnum.TESTING_EXCEPTIONS.message)
 
 //    @Nested

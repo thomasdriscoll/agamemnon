@@ -26,6 +26,10 @@ paths:
           schema:
             type: string
       responses:
+        '201':
+          description: JSON array of year's worth of daily candle data
+          content:
+            application/json:
 
   "/agamemnon/cryptos/{cryptoId}/dailyvolatility/":
     post:
