@@ -47,6 +47,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
+    implementation("org.springdoc:springdoc-openapi-ui:1.4.8")
     implementation(project(":controller"))
 }
 
