@@ -17,8 +17,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CryptoLabelResponse'
-        '400':
-          $ref: '#/components/schemas/BadRequest'
         '401':
           $ref: '#/components/schemas/Unauthorized'
 
@@ -39,12 +37,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MultipleCryptosResponse'
-        '400':
-          $ref: '#/components/schemas/BadRequest'
         '401':
           $ref: '#/components/schemas/Unauthorized'
         '404':
-          $ref: '#/components/schemas/NotFound'
+          description: The cryptoID supplied could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   "/agamemnon/cryptos/{cryptoId}/dailyvolatility/":
     post:
@@ -62,12 +62,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MultipleSameDayCryptosResponse'
-        '400':
-          $ref: '#/components/schemas/BadRequest'
         '401':
           $ref: '#/components/schemas/Unauthorized'
         '404':
-          $ref: '#/components/schemas/NotFound'
+          description: The cryptoID supplied could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 
     delete:
       description: Deletes whatever got added by the POST operation
@@ -89,12 +92,14 @@ paths:
                     type: int
                   data:
                     type: none
-        '400':
-          $ref: '#/components/schemas/BadRequest'
         '401':
           $ref: '#/components/schemas/Unauthorized'
         '404':
-          $ref: '#/components/schemas/NotFound'
+          description: The cryptoID supplied could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   "/agamemnon/cryptos/{cryptoId}/range":
     get:
@@ -127,11 +132,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/MultipleCryptosResponse'
         '400':
-          $ref: '#/components/schemas/BadRequest'
+          description: The time range provided is invalid. # note about the format of time/date ranges
+                                                            # Also might want to remind to provide ranges less than a year
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '401':
           $ref: '#/components/schemas/Unauthorized'
         '404':
-          $ref: '#/components/schemas/NotFound'
+          description: The cryptoID supplied could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 
   "/agamemnon/cryptos/{cryptoId}/calculate":
@@ -165,31 +179,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/CryptoVarianceResponse'
         '400':
-          $ref: '#/components/schemas/BadRequest'
+          description: The time range provided is invalid. # note about the format of time/date ranges
+          # Also might want to remind to provide ranges less than a year
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '401':
           $ref: '#/components/schemas/Unauthorized'
         '404':
-          $ref: '#/components/schemas/NotFound'
+          description: The cryptoID supplied could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 
 components:
   responses:
     # Error responses are defined to be reusable and default.
     # If an api should have unique error codes/messages, these do not need to be used.
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
-      description: Unauthorized
+      # This is only useful if we have a 'user'. This will need to be created.
+      description: Unauthorized. If you are an authorized user, please login to continue.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
     BadRequest:
-      description: Bad Request
+      description: Bad Request #what sort of things might be bad?
       content:
         application/json:
           schema:
