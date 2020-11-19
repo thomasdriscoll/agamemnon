@@ -17,11 +17,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CryptoLabelResponse'
-        '400':
-          $ref: '#/components/schemas/BadRequest'
-        '401':
-          $ref: '#/components/schemas/Unauthorized'
-
+        '502':
+          description: JSON array containing internal server error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+              examples:
+                DBerror:
+                  value:
+                    status: 502.1
+                    message: Could not communicate with cryptos database.
 
   "/agamemnon/cryptos/{cryptoId}/onboard":
     post:
@@ -39,12 +45,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MultipleCryptosResponse'
-        '400':
-          $ref: '#/components/schemas/BadRequest'
-        '401':
-          $ref: '#/components/schemas/Unauthorized'
         '404':
-          $ref: '#/components/schemas/NotFound'
+          description: JSON array containing resource not found error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+              examples:
+                UnknownID:
+                  value:
+                    status: 404.1
+                    message: The specified cryptoId could not be found.
+        '502':
+          description: JSON array containing internal server error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+              examples:
+                DBerror:
+                  value:
+                    status: 502.1
+                    message: Could not communicate with cryptos database.
 
   "/agamemnon/cryptos/{cryptoId}/dailyvolatility/":
     post:
@@ -62,12 +84,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MultipleSameDayCryptosResponse'
-        '400':
-          $ref: '#/components/schemas/BadRequest'
-        '401':
-          $ref: '#/components/schemas/Unauthorized'
         '404':
-          $ref: '#/components/schemas/NotFound'
+          description: JSON array containing resource not found error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+              examples:
+                UnknownID:
+                  value:
+                    status: 404.1
+                    message: The specified cryptoId could not be found.
+        '502':
+          description: JSON array containing internal server error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+              examples:
+                DBerror:
+                  value:
+                    status: 502.1
+                    message: Could not communicate with cryptos database.
 
     delete:
       description: Deletes whatever got added by the POST operation
@@ -89,12 +127,28 @@ paths:
                     type: int
                   data:
                     type: none
-        '400':
-          $ref: '#/components/schemas/BadRequest'
-        '401':
-          $ref: '#/components/schemas/Unauthorized'
-        '404':
-          $ref: '#/components/schemas/NotFound'
+        '404': # Unsure if this is necessary here.
+          description: JSON array containing resource not found error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+              examples:
+                UnknownID:
+                  value:
+                    status: 404.1
+                    message: The specified cryptoId could not be found.
+        '502':
+          description: JSON array containing internal server error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+              examples:
+                DBerror:
+                  value:
+                    status: 502.1
+                    message: Could not communicate with cryptos database.
 
   "/agamemnon/cryptos/{cryptoId}/range":
     get:
@@ -127,12 +181,42 @@ paths:
               schema:
                 $ref: '#/components/schemas/MultipleCryptosResponse'
         '400':
-          $ref: '#/components/schemas/BadRequest'
-        '401':
-          $ref: '#/components/schemas/Unauthorized'
-        '404':
-          $ref: '#/components/schemas/NotFound'
-
+          description: JSON array containing bad request error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+              examples:
+                InvalidRange:
+                  value:
+                    status: 400.1
+                    message: The specified range is out of bounds (can only query up to a year).
+                BadFormat:
+                  value:
+                    status: 400.2
+                    message: The specified range is not a valid datetime range. Must be (insert format).
+        '404': # Unsure if this is necessary here.
+          description: JSON array containing resource not found error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+              examples:
+                UnknownID:
+                  value:
+                    status: 404.1
+                    message: The specified cryptoId could not be found.
+        '502':
+          description: JSON array containing internal server error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+              examples:
+                DBerror:
+                  value:
+                    status: 502.1
+                    message: Could not communicate with cryptos database.
 
   "/agamemnon/cryptos/{cryptoId}/calculate":
     get:
@@ -165,43 +249,44 @@ paths:
               schema:
                 $ref: '#/components/schemas/CryptoVarianceResponse'
         '400':
-          $ref: '#/components/schemas/BadRequest'
-        '401':
-          $ref: '#/components/schemas/Unauthorized'
-        '404':
-          $ref: '#/components/schemas/NotFound'
-
+          description: JSON array containing bad request error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+              examples:
+                InvalidRange:
+                  value:
+                    status: 400.1
+                    message: The specified range is out of bounds (can only query up to a year).
+                BadFormat:
+                  value:
+                    status: 400.2
+                    message: The specified range is not a valid datetime range. Must be (insert format).
+        '404': # Unsure if this is necessary here.
+          description: JSON array containing resource not found error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+              examples:
+                UnknownID:
+                  value:
+                    status: 404.1
+                    message: The specified cryptoId could not be found.
+        '502':
+          description: JSON array containing internal server error code and relevant message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+              examples:
+                DBerror:
+                  value:
+                    status: 502.1
+                    message: Could not communicate with cryptos database.
 
 components:
-  responses:
-    # Error responses are defined to be reusable and default.
-    # If an api should have unique error codes/messages, these do not need to be used.
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalError:
-      #Do we really need this 5xx?
-      description: Server has encountered an error while processing request
-      content:
-        application/json:
-          schema:
-            $ref: '#components/schemas/Error'
-
   schemas:
     CryptoLabelResponse:
       type: object
@@ -307,13 +392,24 @@ components:
         label:
           type: string
           example: APPL
-    Error:
-      # Schema for error response body
+    BadRequest:
       type: object
       properties:
-        code:
-          type: string
-          required: true
+        status:
+          type: float
         message:
           type: string
-          required: true
+    NotFound:
+      type: object
+      properties:
+        status:
+          type: float
+        message:
+          type: string
+    ServerError:
+      type: object
+      properties:
+        status:
+          type: float
+        message:
+          type: string
